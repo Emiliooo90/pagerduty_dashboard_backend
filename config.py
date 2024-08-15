@@ -1,7 +1,5 @@
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
 
 class Config:
     SQLALCHEMY_DATABASE_URI = f"mysql://root:{os.getenv('DB_PASSWORD')}@db:3306/{os.getenv('DB_DATABASE')}"
