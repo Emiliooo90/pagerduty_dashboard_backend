@@ -10,7 +10,8 @@ class DataService:
     def save_services():
         services = APIClient.get_services()['services']
         for service in services:
-            db_service = Service(id=service['id'], name=service['name'], team_id=service['team']['id'])
+            team_id = service['team']['id'] if 'team' in service and 'id' in service['team'] else None
+            db_service = Service(id=service['id'], name=service['name'], team_id=team_id)
             db.session.add(db_service)
         db.session.commit()
 
@@ -34,6 +35,7 @@ class DataService:
     def save_escalation_policies():
         policies = APIClient.get_escalation_policies()['escalation_policies']
         for policy in policies:
-            db_policy = EscalationPolicy(id=policy['id'], name=policy['name'], team_id=policy['team']['id'])
+            team_id = policy['team']['id'] if 'team' in policy and 'id' in policy['team'] else None
+            db_policy = EscalationPolicy(id=policy['id'], name=policy['name'], team_id=team_id)
             db.session.add(db_policy)
         db.session.commit()
