@@ -1,0 +1,196 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "PagerDuty Dashboard Backend",
+    "description": "API documentation for PagerDuty Dashboard Backend",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/services": {
+      "get": {
+        "summary": "Get all services",
+        "responses": {
+          "200": {
+            "description": "A list of services",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Service"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/<int:service_id>/incidents": {
+      "get": {
+        "summary": "Get incidents for a service",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of incidents",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Incident"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services/<int:service_id>/incidents/by_status": {
+      "get": {
+        "summary": "Get incidents for a service by status",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A dictionary of incidents by status",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incidents": {
+      "get": {
+        "summary": "Get all incidents",
+        "responses": {
+          "200": {
+            "description": "A list of incidents",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Incident"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teams": {
+      "get": {
+        "summary": "Get all teams",
+        "responses": {
+          "200": {
+            "description": "A list of teams",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Team"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/escalation_policies": {
+      "get": {
+        "summary": "Get all escalation policies",
+        "responses": {
+          "200": {
+            "description": "A list of escalation policies",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EscalationPolicy"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fetch_and_save": {
+      "get": {
+        "summary": "Fetch and save data from PagerDuty API",
+        "responses": {
+          "200": {
+            "description": "Data fetched and saved successfully",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Service": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "team_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Incident": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Team": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "EscalationPolicy": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "team_id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

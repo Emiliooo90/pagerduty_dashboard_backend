@@ -1,30 +1,36 @@
-import requests
+import aiohttp
+import asyncio
+import logging
 
 class APIClient:
     BASE_URL = 'https://api.pagerduty.com'
     HEADERS = {
         'Authorization': 'Token token=u+b4CCjDZsXfuxx-w_fw',
-        'Accept': 'application/vnd.pagerduty+json;version=2'
+        'Accept': 'application/vnd.pagerduty+json;version=2',
+        'Content-Type': 'application/json'
     }
 
     @staticmethod
-    def get(endpoint):
-        response = requests.get(f"{APIClient.BASE_URL}/{endpoint}", headers=APIClient.HEADERS)
-        response.raise_for_status()
-        return response.json()
+    async def get(endpoint):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"{APIClient.BASE_URL}/{endpoint}", headers=APIClient.HEADERS) as response:
+                response.raise_for_status()
+                return await response.json()
 
     @staticmethod
-    def get_services():
-        return APIClient.get('services')
+    async def get_services():
+        response = await APIClient.get('services')
+        logging.info(f"API response for services: {response}")
+        return response
 
     @staticmethod
-    def get_incidents():
-        return APIClient.get('incidents')
+    async def get_incidents():
+        return await APIClient.get('incidents')
 
     @staticmethod
-    def get_teams():
-        return APIClient.get('teams')
+    async def get_teams():
+        return await APIClient.get('teams')
 
     @staticmethod
-    def get_escalation_policies():
-        return APIClient.get('escalation_policies')
+    async def get_escalation_policies():
+        return await APIClient.get('escalation_policies')

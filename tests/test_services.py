@@ -1,29 +1,23 @@
-import unittest
+import pytest
 from app import create_app, db
 from app.models.service import Service
 
-class ServiceRoutesTestCase(unittest.TestCase):
-    def setUp(self):
-        self.app = create_app()
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        db.create_all()
-
-    def tearDown(self):
-        db.session.remove()
+@pytest.fixture
+def client():
+    app = create_app()
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    with app.test_client() as client:
+        with app.app_context():
+            db.create_all()
+            yield client
         db.drop_all()
-        self.app_context.pop()
 
-    def test_get_services(self):
-        service = Service(name='Test Service')
-        db.session.add(service)
-        db.session.commit()
-
-        with self.app.test_client() as client:
-            response = client.get('/services')
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(len(response.json()), 1)
-            self.assertEqual(response.json()[0]['name'], 'Test Service')
-
-if __name__ == '__main__':
-    unittest.main()
+def test_get_services(client):
+    service = Service(id='1', name='Service1')
+    db.session.add(service)
+    db.session.commit()
+    
+    response = client.get('/services')
+    assert response.status_code == 200
+    assert response.json == [{'id': '1', 'name': 'Service1', 'team_id': None}]
