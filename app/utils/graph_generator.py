@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import os
 
 class GraphGenerator:
     @staticmethod
@@ -11,4 +12,9 @@ class GraphGenerator:
         plt.xlabel('Services')
         plt.ylabel('Number of Incidents')
         plt.title('Number of Incidents per Service')
+
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        
         plt.savefig(filename)
+        plt.close()  # Close the plot to free memory

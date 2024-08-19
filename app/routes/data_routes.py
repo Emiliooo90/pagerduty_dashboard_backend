@@ -9,4 +9,5 @@ def fetch_and_save():
     DataService.save_incidents()
     DataService.save_teams()
     DataService.save_escalation_policies()
+    DataService.insert_incidents()
     return jsonify({"message": "Data fetched and saved successfully"})

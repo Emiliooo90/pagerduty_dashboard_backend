@@ -11,9 +11,12 @@ class APIClient:
     }
 
     @staticmethod
-    async def get(endpoint):
+    async def get(endpoint, params=None):
+        if params is None:
+            params = {}
+        params['limit'] = 100
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"{APIClient.BASE_URL}/{endpoint}", headers=APIClient.HEADERS) as response:
+            async with session.get(f"{APIClient.BASE_URL}/{endpoint}", headers=APIClient.HEADERS, params=params) as response:
                 response.raise_for_status()
                 return await response.json()
 

@@ -10,18 +10,27 @@ def get_services():
     services = service_service.get_all_services()
     return jsonify(services)
 
-@service_bp.route('/services/<int:service_id>/incidents', methods=['GET'])
-def get_incidents_by_service(service_id):
-    incidents = ServiceService.get_incidents_by_service(service_id)
-    return jsonify(incidents)
-
-@service_bp.route('/services/<int:service_id>/incidents/by_status', methods=['GET'])
-def get_incidents_by_service_and_status(service_id):
-    incidents_by_status = ServiceService.get_incidents_by_service_and_status(service_id)
-    return jsonify(incidents_by_status)
-
 @service_bp.route('/services/count', methods=['GET'])
 def count_services():
     service_service = ServiceService(db.session)
     count = service_service.count_services()
     return jsonify({'service_count': count})
+
+@service_bp.route('/services/incidents/count', methods=['GET'])
+def count_incidents_per_service():
+    service_service = ServiceService(db.session)
+    incidents_count = service_service.count_incidents_per_service()
+    return jsonify(incidents_count)
+
+@service_bp.route('/services/incidents/by_status/count', methods=['GET'])
+def count_incidents_by_service_and_status():
+    service_service = ServiceService(db.session)
+    incidents_by_status = service_service.count_incidents_by_service_and_status()
+    return jsonify(incidents_by_status)
+
+
+@service_bp.route('/services/incidents/analyze', methods=['GET'])
+def analyze_incidents():
+    service_service = ServiceService(db.session)
+    analysis = service_service.analyze_incidents()
+    return jsonify(analysis)
