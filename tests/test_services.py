@@ -8,11 +8,12 @@ async def client():
     app = create_app()
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:emilio12345678.@localhost:3306/pagerdutydatabase'
-    async with app.test_client() as client:
-        async with app.app_context():
+    
+    async with app.app_context():
+        async with app.test_client() as client:
             db.create_all()
             yield client
-        db.drop_all()
+            db.drop_all()
 
 @pytest.mark.asyncio
 async def test_get_services(client):

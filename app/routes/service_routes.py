@@ -26,7 +26,12 @@ def count_incidents_per_service():
 def count_incidents_by_service_and_status():
     service_service = ServiceService(db.session)
     incidents_by_status = service_service.count_incidents_by_service_and_status()
-    return jsonify(incidents_by_status)
+    total_count = sum(sum(status_counts.values()) for status_counts in incidents_by_status.values())
+    response = {
+        'incidents_by_status': incidents_by_status,
+        'total_count': total_count
+    }
+    return jsonify(response)
 
 
 @service_bp.route('/services/incidents/analyze', methods=['GET'])

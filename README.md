@@ -69,13 +69,11 @@ docker-compose down -v
 
 ## API Endpoints
 - GET `/services`: Get the list of services
-- GET `/services/<int:service_id>/incidents`: Get the list of incidents for a specific service
-- GET `/services/<int:service_id>/incidents/by_status`: Get the list of incidents for a specific service filtered by status
 - GET `/services/count`: Get the count of services
 - GET `/services/incidents/count`: Get the count of incidents per service
 - GET `/services/incidents/by_status/count`: Get the count of incidents per service filtered by status
 - GET `/services/incidents/analyze`: Analyze incidents
-- GET `/incidents`: Get the list of incidents
+- GET `/incidents`: Get the list of incidents (Note: I had to insert data manually in this endpoint because the PagerDuty API does not provide data for this endpoint)
 - GET `/incidents/analysis`: Analyze incidents
 - GET `/view_incident_graph`: View incident graph
 - GET `/teams`: Get the list of teams
@@ -89,5 +87,17 @@ docker-compose down -v
 Run unit and integration tests:
 
 ```
+# For Unix-based systems
+source venv/bin/activate
+pytest
+
+# For Windows
+venv\Scripts\activate
 pytest
 ```
+
+## Note
+
+Data for the `/incidents` endpoint was inserted manually as the PagerDuty API does not provide data for this endpoint.
+
+![Incidents endpoint without data](image.png)
