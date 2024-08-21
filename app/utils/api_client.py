@@ -1,11 +1,16 @@
 import aiohttp
 import asyncio
 import logging
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class APIClient:
     BASE_URL = 'https://api.pagerduty.com'
     HEADERS = {
-        'Authorization': 'Token token=u+b4CCjDZsXfuxx-w_fw',
+        'Authorization': f"Token token={os.getenv('API_KEY')}",
         'Accept': 'application/vnd.pagerduty+json;version=2',
         'Content-Type': 'application/json'
     }
