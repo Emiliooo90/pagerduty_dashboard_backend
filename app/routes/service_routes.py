@@ -22,11 +22,18 @@ def count_incidents_per_service():
     incidents_count = service_service.count_incidents_per_service()
     return jsonify(incidents_count)
 
+
 @service_bp.route('/services/incidents/by_status/count', methods=['GET'])
 def count_incidents_by_service_and_status():
     service_service = ServiceService(db.session)
     incidents_by_status = service_service.count_incidents_by_service_and_status()
-    total_count = sum(sum(status_counts.values()) for status_counts in incidents_by_status.values())
+    
+    # Ensure all values are integers
+    total_count = sum(
+        sum(int(value) for value in status_counts.values() if isinstance(value, (int, str)) and str(value).isdigit())
+        for status_counts in incidents_by_status if isinstance(status_counts, dict)
+    )
+    
     response = {
         'incidents_by_status': incidents_by_status,
         'total_count': total_count
